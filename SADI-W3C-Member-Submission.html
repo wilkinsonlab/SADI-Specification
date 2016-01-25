@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Semantic Automated Discovery and Integration</title>
+    <meta charset='utf-8'/>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common'
+            class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+          specStatus: "Member-SUBM",
+          shortName:  "SADI",
+          logos: [
+               {
+                  src: "http://sadiframework.org/content/wp-content/themes/SADI/images/sadi-header.png",
+                  href: "http://sadiframework.org",
+                  alt: "SADI - Semantic Automated Discovery and Integration",
+                  width: 300,
+                  id: 'SADILogo'
+               }
+            ],
+         
+          editors: [
+                {   name:       "Mark Wilkinson",
+                    url:        "http://wilkinsonlab.info/",
+                    company:    "CBGP-UPM",
+                    companyURL: "http://www.cbgp.upm.es/" },
+                {   name:       "Michel Dumontier",
+                    url:        "http://semanticscience.org/",
+                    company:    "Stanford University",
+                    companyURL: "http://www.stanford.edu/" }
+                {   name:       "Luke McCarthy",
+                    url:        "http://wilkinsonlab.info/",
+                }
+                {   name:       "Benjamin Vandervalk",
+                    url:        "http://wilkinsonlab.info/",
+                }
+                {   name:       "Chris Baker",
+                }
+                {   name:       "Alexandre R.",
+                    url:        "http://wilkinsonlab.info/",
+                }
+          ],
+          wg:           "HCLS",
+          wgURI:        "https://www.w3.org/blog/hcls/",
+          wgPublicList: "",
+          wgPatentURI:  "",
+      };
+    </script>
+  </head>
+  <body>
+    <section id='abstract'>
+      <p>
+        This document describes the components of a Data FAIRport - an approach to providing a searchability and interoperability layer over legacy and contemporary, Web-accessible metadata and data repositories.  These include general-purpose data repositories (e.g. FigShare and Dryad) or special-purpose data repositories such as UniProt or GEO.
+      </p>
+    </section>
+
+    <section id='sotd'>
+      <p>
+ </p>
+    </section>
+    
+    <section class='informative'>
+      <h2>Introduction</h2>
+      <p>
+<a href='http://datafairport.org'>Data FAIRports</a> were first conceived at the "Jointly Designing a Data FAIRport" meeting in Leiden, 2014.  The objective of the FAIRport initiative is to encourage, and provide migration pathways for, public and private data repositories to make their data Findable, Accessible, Interoperable, and Reusable (FAIR).  </p>
+<p>   At this initial FAIRport meeting, a self-selecting group of "hackers" decided to assemble the FAIRport Skunkworks team.  Their objective was to create early prototypes of FAIR behaviors, and explore a variety of approaches to cross-resource (meta)data description, discovery, accessibility, and interoperability.  This specification describes release 0.1 of the FAIRport specification and design patterns conceived by the Skunkworks team members through a series of teleconferences and hackathons.</p>
+    </section>
+    <section class='conformance'>
+      <h2>Conformance</h2>
+      As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.
+
+The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL in this specification are to be interpreted as described in [[RFC2119]].
+
+    </section>
+    <section>
+        <h2>What is a FAIRport?</h2>
+        A FAIRport is one or more of several components (where the more components implemented brings greater compliance with the <a href='https://www.force11.org/group/fairgroup/fairprinciples'>
+        FAIR Principles</a>): 
+        <ul>
+            <li>A meta-descriptor (called a "FAIR Profile) of a desired "Projection" of the (meta)data in a repository - "what could the data look like?" (rather than "what DOES the data look like?")</li>
+            <li>An "Accessor" script that provides the URIs for every record in a the resource, or any "slice" of that resource; it also provides the URI for every representation (e.g. syntactc)  of that record that is provided by the resource </li>
+            <li>A "Projector" script that is associated with a FAIR Profile, and is capable of converting one or more of the provider-specified data representations, into the "Projection") defined in the FAIR Profile.  The Projector may do this via calling GET on the URIs provided by the Accessor, or it may do this by communicating directly with the resource itself</li>
+        </ul>
+    </section>
+    <section>
+        <h2>The components of a Data FAIRport</h2>
+        There are several components that combine to make a fully-functional Data FAIRport.  Not all of these components are required, some may or may not be inter-dependent, and the components map loosely onto the 'F', 'A', and 'I' of the FAIR data concepts.
+        <section>
+            <h2>The FAIR Profile ('F')</h2>
+            A FAIR Profile is a meta-descriptor that provides a meta-schema for one (of possibly many) RDF models that could represent the data present in the repository (regardless of its native format or representation).  Effectively, the FAIR Profile describes a "lens" (http://ceur-ws.org/Vol-951/paper5.pdf) through which the data can be projected; when projected through this "lens", it will adopt a the format described by the Profile. FAIR Profiles are instances of the <a href='https://github.com/FAIRDataInitiative/DataFairPort/blob/master/Schema/FAIR-schema.owl'>FAIR Profile Ontology</a>.   
+        </section>
+        <section>
+            <h2>The FAIR Accessor ('A')</h2>
+            FAIR Accessors are lightweight scripts that exhibit the behaviors defined by the <a href='http://www.w3.org/TR/ldp/'>Linked Data Platform</a>, in particular, for the purposes of pagination.  Calling GET on the URL of a FAIR Accessor will return a list of URIs corresponding to the identifiers of all records in the repository, or (more likely) all records corresponding to some specific "slice" of that repository  (for example, the "protein record" slice, or the "allele" slice, or the "CT Scan Image" slice).  These URIs, in turn, will respond to a GET by returning the RDF describing their various representations - e.g. XML, HTML, PDF, etc. - and these are described using the DCAT Distribution portion of the DCAT ontology ([LINK]).  FAIR Accessors are standalone components, and may exist independently of any other component.
+        </section>
+        <section>
+            <h2>The FAIR Projector ('I')</h2>
+            FAIR Projectors are URLs that respond to an HTTP GET request by returning an RDF representation of data.  FAIR Projectors may be associated with one or more FAIR Profiles, and with one or more data repositories.  The FAIR Projector provides a way of accessing the data (or data slice) in the repository in the format defined by the FAIR Profile.  FAIR Projectors may access the repository data directly, or may utilize a FAIR Accessor to accomplish the raw data retrieval, prior to Projection.  There is no need for the FAIR Projector to advertise how it is accessing the data.  As such, FAIR Projectors can exist independently of FAIR Accessors; however, they are tightly linked to a specific FAIR Profile, since they must advertise the data model they will be projecting.
+            The interface of the Projector conforms to the recommendations of the <a href='http://linkeddatafragments.org/'>Linked Data Fragments</a> initiative; in particular, it utilizes the <a href='http://www.hydra-cg.com/spec/latest/core/'>Hydra Core Vocabulary</a> to generate its control hyperlinks for e.g. pagination.
+        </section>
+    </section>
+    <section>
+        <h2> FAIR Profiles in Detail</h2>
+        FAIR Profiles describe the structure of RDF data.  They take the form of a meta-schema, defined by the <a href='http://datafairport.org/schemas/FAIR-schema.owl'>FAIR Profile Ontology</a>.  The FAIR Profile Ontology defines a small number of classes and relations.  The core structure of a FAIR Profile is as follows:
+        
+        <pre class="example">  (TODO  MAKE THIS AN IMAGE)
+          class:FAIR-Class  prop:hasProperty  class:FAIR-Property
+                                              prop:allowedValues  [value-restriction]
+                            dc:provenance class:FAIR-Profile </pre>
+        <ul>
+            
+            <li>the FAIR-Profile class contains information about the publisher of the Profile, and other useful metadata</li>
+            <li>the FAIR-Class describes the structure of one type of individual within the profile (e.g. the structure of an Allele record in this Projection).  FAIR Classes have one or more FAIR Properties </li>
+            <li>the FAIR Property class describes aspects of the property, such as it's cardinality.  </li>
+            <li>the final step in the chain is the value of the allowedValues predicate.  In this version of the FAIRport specification, there are three possible types of values.  (1) an XSD datatype; (2) a set of ontology Class URIs that have been converted into a SKOS Concept Scheme (see HERE for details); (3) the URI of another FAIR Profile (such that profiles can be "nested")</li>
+        </ul>
+        </section>
+        <section>
+        <h2>Examples of FAIR Profiles</h2>
+    This is a very simple FAIR Profile that describes one way of looking at an "Allele" record.  It tells us that it will project the Allele, and one property of that Allele - an image of the mutant - which will be classified according to the SKOS Concept Scheme at <a href='http://biordf.org/DataFairPort/ConceptSchemes/SIOOntologyImage81'>http://biordf.org/DataFairPort/ConceptSchemes/SIOOntologyImage81</a>.   (a discussion of these concept schemes is elsewhere [link]).
+    <pre class='example highlight'>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;rdf:RDF xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;&gt;
+&lt;rdf:Description xmlns:ns1=&quot;http://datafairport.org/schemas/FAIR-schema.owl#&quot;
+          xmlns:ns2=&quot;http://purl.org/dc/terms/&quot;
+          xmlns:ns3=&quot;http://www.w3.org/2000/01/rdf-schema#&quot;
+          rdf:about=&quot;http://biordf.org/DataFairPort/ProfileSchemas/Allele_Profile_SIO.rdf&quot;&gt;
+	&lt;ns1:hasProperty rdf:resource=&quot;http://datafairport.org/sampledata/profileschemaproperty/f8cda720-2118-4fca-9a82-2ff5e8812699&quot;/&gt;
+	&lt;ns1:onClassType rdf:resource=&quot;http://purl.obolibrary.org/obo/SO_0001023&quot;/&gt;
+	&lt;ns2:provenance rdf:resource=&quot;http://biordf.org/DataFairPort/ProfileSchemas/Allele_Profile_SIO.rdf#Profile&quot;/&gt;
+	&lt;rdf:type rdf:resource=&quot;http://datafairport.org/schemas/FAIR-schema.owl#FAIRClass&quot;/&gt;
+	&lt;ns3:label&gt;FAIR Class of Allele&lt;/ns3:label&gt;
+&lt;/rdf:Description&gt;
+&lt;rdf:Description xmlns:ns1=&quot;http://datafairport.org/schemas/FAIR-schema.owl#&quot;
+        xmlns:ns2=&quot;http://purl.org/dc/terms/&quot;
+        xmlns:ns3=&quot;http://www.w3.org/2000/01/rdf-schema#&quot;
+        rdf:about=&quot;http://biordf.org/DataFairPort/ProfileSchemas/Allele_Profile_SIO.rdf#Profile&quot;&gt;
+	&lt;ns1:hasClass rdf:resource=&quot;http://biordf.org/DataFairPort/ProfileSchemas/Allele_Profile_SIO.rdf&quot;/&gt;
+	&lt;ns1:schemardfs_URL rdf:resource=&quot;http://datafairport.org/schemas/FAIR-schema.owl#&quot;/&gt;
+	&lt;ns2:description&gt;FAIR Profile the Image portion of an Allele record using SIO:Image classification&lt;/ns2:description&gt;
+	&lt;ns2:identifier&gt;doi:Mark.Dragon.P2&lt;/ns2:identifier&gt;
+	&lt;ns2:license&gt;Anyone may use this freely&lt;/ns2:license&gt;
+	&lt;ns2:organization&gt;wilkinsonlab.info&lt;/ns2:organization&gt;
+	&lt;ns2:title&gt;FAIR Profile the Image portion of an Allele record&lt;/ns2:title&gt;
+	&lt;rdf:type rdf:resource=&quot;http://datafairport.org/schemas/FAIR-schema.owl#FAIRProfile&quot;/&gt;
+	&lt;ns3:label&gt;FAIR Profile of Allele Images(SIO)&lt;/ns3:label&gt;
+&lt;/rdf:Description&gt;
+&lt;rdf:Description xmlns:ns1=&quot;http://datafairport.org/schemas/FAIR-schema.owl#&quot; xmlns:ns2=&quot;http://www.w3.org/2000/01/rdf-schema#&quot; rdf:about=&quot;http://datafairport.org/sampledata/profileschemaproperty/f8cda720-2118-4fca-9a82-2ff5e8812699&quot;&gt;
+	&lt;ns1:allowedValues rdf:resource=&quot;http://biordf.org/DataFairPort/ConceptSchemes/SIOOntologyImage81&quot;/&gt;
+	&lt;ns1:onPropertyType rdf:resource=&quot;http://semanticscience.org/ontology/SIO_000205&quot;/&gt;
+	&lt;rdf:type rdf:resource=&quot;http://datafairport.org/schemas/FAIR-schema.owl#FAIRProperty&quot;/&gt;
+	&lt;ns2:label&gt;is represented by&lt;/ns2:label&gt;
+&lt;/rdf:Description&gt;
+&lt;/rdf:RDF&gt;
+
+    </pre>
+    (see original file <a href='http://biordf.org/DataFairPort/ProfileSchemas/Allele_Profile_SIO.rdf'>here</a>)
+   <ul> 
+<li>The Class described by this Profile is identified by its URL <code class='highlight'>http://biordf.org/DataFairPort/ProfileSchemas/Allele_Profile_SIO.rdf</code>.</li>
+<li>In it's metadata (#Profile) we find that it has the title "FAIR Profile the Image portion of an Allele record", among other useful bits of information</li>  
+<li>In this case, the FAIR Class definition and its FAIR Profile metadata are in the same document, but it doesn't need to be so. <b>FAIR Classes could share the same
+FAIR Profile metadata, which may be in an independent document anywhere on the Web</b>. </li> 
+<li>Inspecting that Class, we find that, in the RDF projection, it is going to be  <code class='highlight'> rdf:type http://purl.obolibrary.org/obo/SO_0001023 </code>
+(Sequence Ontology "Allele" Class).  We also see that the Allele Class of these projected RDF individuals will have one property, which is defined by a locally-identified
+individual called <code class='highlight'>http://datafairport.org/sampledata/profileschemaproperty/991f68c2-f43f-4dd6-bf3b-68dafebb6a57</code>) </li>
+<li>Inspecting that property, we find that this property in the projected RDF will be <code class='highlight'>http://semanticscience.org/ontology/SIO_000205</code>,
+which is the SIO ontology's "is represented by" property.</li>
+<li>Finally, the allowedValues tells us that the values of this property are constrained to be one of the URIs in the SKOS ConceptScheme located at
+<code class='highlight'>http://biordf.org/DataFairPort/ConceptSchemes/SIOOntologyImage81</code> (this is a SKOSified slice of the OWL Classes along the "Image"
+branch of the SIO ontology)... this means that, in the RDF Projection, the value of the "is represented by" predicate will be some kind of SIO:Image</li>
+</ul>
+
+The RDF of an Allele record projected through this FAIR Profile will, therefore, look like this:
+
+<pre class='example highlight'>
+  
+&lt;http://antirrhinum.net/cgi-bin/ace/generic/xml/DragonDB?name=4n;class=Allele&gt; 
+    &lt;http://semanticscience.org/ontology/SIO_000205&gt; 
+          &lt;http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?class=Phenotype_Picture&amp;name=4n-0&gt; ;
+    a &lt;http://purl.obolibrary.org/obo/SO_0001023&gt; .
+&lt;http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?class=Phenotype_Picture&amp;name=4n-0&gt; 
+    a &lt;http://semanticscience.org/ontology/SIO_000081&gt; .
+&lt;http://purl.obolibrary.org/obo/SO_0001023&gt; &lt;http://www.w3.org/2000/01/rdf-schema#label&gt; &quot;Allele&quot; .
+&lt;http://semanticscience.org/ontology/SIO_000081&gt; &lt;http://www.w3.org/2000/01/rdf-schema#label&gt; &quot;Image&quot; .
+
+</pre>
+        </section>
+</body>
+</html>
