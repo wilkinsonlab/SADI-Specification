@@ -132,11 +132,15 @@ The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and 
     
     <section id='sadipatterns'>
       <h2>SADI Design Patterns</h2>
-      SADI specifies <b>only three</b> behaviors that must be true of all implementations:
+      SADI specifies <b>only three</b> behaviors that must be true of all implementations,<span style='color:blue'>and one behavior that must be true of any public-facing implementation</span>:
       <ol>
         <li>The resource MUST consume and produce RDF data natively</li>
         <li>The resource MUST return the same individuals/instances that it consumed - i.e. the root URI(s) of the RDF graph(s) it consumed MUST be the root URI(s) of the RDF graph(s) returned.</li>
         <li>The output of the resource MUST be connected to the input URI via an RDF predicate</li>
+        <li><span style='color:blue'>PROPOSED TO ADD: Public-facing resources MUST provide descriptive metadata following
+        the <a href='http://www.datafairport.org/fair-principles-living-document-menu'></a>FAIR Data Principles</a>.
+        This SHOULD include descriptors of the input and output data (in RDF Schema, OWL, or some other widely-accepted descriptive format),
+        and a description of the functionality of the resource</span></li>
       </ol>
       
       These three behaviors have a wide range of consequences that facilitate interoperability and integration with other Semantic Web resources:
