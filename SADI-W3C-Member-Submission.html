@@ -137,13 +137,13 @@ The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and 
         <li>The resource MUST consume and produce RDF data natively</li>
         <li>The resource MUST return the same individuals/instances that it consumed - i.e. the root URI(s) of the RDF graph(s) it consumed MUST be the root URI(s) of the RDF graph(s) returned.</li>
         <li>The output of the resource MUST be connected to the input URI via an RDF predicate</li>
-        <li><span style='color:blue'>PROPOSED TO ADD: Public-facing resources MUST provide descriptive metadata following
+        <li><span style='color:blue'>PROPOSED TO ADD: All resources SHOULD, and Public-facing resources MUST, provide descriptive metadata following
         the <a href='http://www.datafairport.org/fair-principles-living-document-menu'>FAIR Data Principles</a>.
-        This SHOULD include descriptors of the input and output data (in RDF Schema, OWL, or some other widely-accepted descriptive format),
-        and a description of the functionality of the resource</span></li>
+        This MUST include descriptors of the input and output data (in RDF Schema, OWL, or some other widely-accepted descriptive format),
+        and SHOULD include a description of the functionality of the resource and/or the operations that lead to the output</span></li>
       </ol>
       
-      These three behaviors have a wide range of consequences that facilitate interoperability and integration with other Semantic Web resources:
+      These behaviors result in a wide range of consequences that facilitate interoperability and integration with other Semantic Web resources:
       
       <ul>
       <li>Linked data does not need to be transformed before being passed into the resource.
@@ -161,10 +161,8 @@ The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and 
       The client simply merges the output into the existing graph, and it aligns correctly based on the shared URI.</li>
       </ul>
       
-      <p>These are the only requirements for SADI-compliance, and can be applied to any transaction-based resource.
-      Additional utility can be gained by, for example, defining (through RDF Schema or OWL) the
-      structure and/or semantics of the input and output data, describing the functionality of the
-      resource, and by defining a method for discovering these structural/functional definitions; however,
+      <p>Adhering to these design patterns are the only requirements for SADI-compliance, and can be applied to any transaction-based resource.
+      Additional utility can be gained by, for example, creating a searchable index of the resource descriptors; however,
       these are only a requirement for resources intended to be used by third-parties.</p>
     </section>
     
