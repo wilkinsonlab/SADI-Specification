@@ -132,7 +132,7 @@ The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and 
     
     <section id='sadipatterns'>
       <h2>SADI Design Patterns</h2>
-      SADI specifies <b>only three</b> features that must be true of all implementations:
+      SADI specifies <b>only three</b> behaviorsOh I bet that must be true of all implementations:
       <ol>
         <li>The resource MUST consume and produce RDF data natively</li>
         <li>The resource MUST return the same individuals/instances that it consumed - i.e. the root URI(s) of the RDF graph(s) it consumed MUST be the root URI(s) of the RDF graph(s) returned.</li>
@@ -141,19 +141,28 @@ The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and 
       
       These three behaviors have a wide range of consequences that facilitate interoperability and integration with other Semantic Web resources:
       
-      First, linked data does not need to be transformed before being passed into the resource.
+      <p>First, linked data does not need to be transformed before being passed into the resource.
       As such, the semantic content of the graph is preserved.
-      This cannot be guaranteed when converting data into, for example, XML or other non-semantic data structures
+      This cannot be guaranteed when converting data into, for example, XML or other non-semantic data structures</p>
       
-      Second, because the output must be linked to the input,
+      <p>Second, because the output must be linked to the input,
       the result of accessing the resource is an unbroken chain of linked data,
-      centered on the input URI.  In effect, all resources have exactly the same function - that is, to 'annotate' the input data.
+      centered on the input URI.  In effect, all resources have exactly the same function - that is, to 'annotate' the input data.</p>
       
-      Third, because the input and output graphs are rooted in the same node (URI),
+      <p>Third, because the input and output graphs are rooted in the same node (URI),
       there is no need for any additional messaging structure for multiplexed access.
       The resource might consume many inputs simultaneously, but there is no need (on either side
       of the transaction) to monitor the record the identity or order of these multiple inputs or outputs.
-      The client simply merges the output into the existing graph, and it aligns correctly based on the shared URI.
+      The client simply merges the output into the existing graph, and it aligns correctly based on the shared URI.</p>
+      
+      <p>These are the only requirements for SADI-compliance, and can be applied to any transaction-based resource.
+      Additional utility can be gained by, for example, defining (through RDF Schema or OWL) the
+      structure and/or semantics of the input and output data, describing the functionality of the
+      resource, and by defining a method for discovering these structural/functional definitions; however,
+      these are not part of the core SADI design patterns.  <span style='color:red'>I wonder if it should be required...
+      if the resources are not public-facing, then there's really no need to insist on having a way to retrieve
+      the interface definition, though... presumably, it is known by the user already.  Perhaps it should be a requirement
+      for any public-facing resource (that would also make it FAIR!  :-) )</span></p>
     </section>
     
     
