@@ -110,7 +110,7 @@ SADI is a set of best practices for implementing stateless web
    data as output.  Its primary purpose is to increase the
    interoperability of services across independent providers.  Under
    SADI, the schemas for the input and output RDF data of a service are
-   defined by the service's _input OWL class_ and _output OWL class_,
+   defined by the service's <i>input OWL class</i> and <i>output OWL class</i>,
    respectively.  Provider-specified metadata about a service, including
    the URIs of the input and output OWL classes, is published as an RDF
    document that is retrievable by an HTTP GET on the service URL.
@@ -193,7 +193,7 @@ The principal benefit of web services is that they enable widespread
 
    <ul>
     
-   <li>input OWL class -- an OWL class that defines the required
+   input OWL class -- an OWL class that defines the required
       structure (i.e. schema) of a single input to a SADI service.  Each
       SADI service has exactly one input OWL class.</li>
 
@@ -203,7 +203,8 @@ The principal benefit of web services is that they enable widespread
       Membership of an RDF node in a given OWL class can be determined
       using an OWL reasoner or can be directly asserted by assigning an
       rdf:type value that is equal to the OWL class URI.</li>
-      <li>input RDF document_ -- a document containing one or more input
+      
+    <li>input RDF document -- a document containing one or more input
       instances for a SADI service.  A SADI service is invoked by
       issuing an HTTP POST to the service URL with the input RDF
       document as the request body.
@@ -239,7 +240,7 @@ The principal benefit of web services is that they enable widespread
       service.  Similarly to input and output instances, service
       execution parameters may have arbitrarily complex representations
       in RDF.  The parameter OWL class describes a graph that contains
-      _all_ service execution parameters.  If a service has multiple
+      <i>all</i> service execution parameters.  If a service has multiple
       execution parameters, their RDF representations must be connected
       in a single RDF graph that is an instance of the parameter OWL
       class.</li>
@@ -251,7 +252,7 @@ The principal benefit of web services is that they enable widespread
       parameter instance, which affects the processing of all input
       instances within the input RDF document.</li>
 
-   <li>default parameter instance_ -- an instance of the parameter OWL
+   <li>default parameter instance -- an instance of the parameter OWL
       class that represents the default values for all service execution
       parameters.  These values are used when an input RDF document does
       not explicitly specify values for execution parameters.</li>
@@ -414,20 +415,20 @@ OWL reasoner as the main vehicle for data and service matchmaking
    described by WSDL.  In the terminology of WSDL, SADI services must
     have:
 <ul>
-   <li>one operation per service_, where an _operation_ is interaction
+   <li>one operation per service, where an operation is an interaction
       between the client and the service to accomplish some result.  An
       operation is analogous to a function call in a programming
       language.</li>
 
-   <li>one endpoint per service_, where an _endpoint_ is an URL where
+   <li>one endpoint per service, where an endpoint is a URL where
       the client interacts with the service</li>
 
-   <li>a fixed protocol_, where the _protocol_ is the mechanism for
+   <li>a fixed protocol, where the protocol is the mechanism for
       transporting messages between the client and the service.  All
       SADI services use HTTP as the underlying protocol.</li>
 
-   <li>a fixed message exchange pattern_, where a _message exchange
-      pattern_ is a sequence of messages that are exchanged between a
+   <li>a fixed message exchange pattern, where a message exchange
+      pattern is a sequence of messages that are exchanged between a
       client and a service during an operation.  SADI services have one
       of two possible message exchange patterns, corresponding to
       synchronous services (Section 10.1) and asynchronous services
@@ -479,8 +480,8 @@ OWL reasoner as the main vehicle for data and service matchmaking
 
    OWL-S [[OWL-S]] and WSMO [[WSMO]] are two previous Semantic Web Services
    standards that are similar in their goals and approaches.  Both
-   standards define ontologies for describing the _capablities_ and
-   _choreographies_ of stateful web services, where capabilities are
+   standards define ontologies for describing the capablities and
+   choreographies of stateful web services, where capabilities are
    changes to the world that are effected by a service, and
    choreographies are the sequences of messages exchanged between a
    client and a service during an interaction.  (Choreographies
@@ -567,7 +568,7 @@ OWL reasoner as the main vehicle for data and service matchmaking
    input graphs for Guy Incognito and Homer Simpson separately, and
    afterwords performing an RDF-merge on the two output RDF documents.
    The input instances are identified by the service as those URIs
-   having an rdf:type matching the service's _input OWL class_ (hello:
+   having an rdf:type matching the service's input OWL class (hello:
    NamedIndividual).  The purpose of the input OWL class is to describe
    the expected structure of the input instances.  More will be said
    about the purpose and design of the input OWL class in The Input OWL
@@ -575,8 +576,8 @@ OWL reasoner as the main vehicle for data and service matchmaking
 
    Analogously to the case for input instances, each output instance in
    the output RDF document is assigned an rdf:type equal to the URI of
-   the service's _output OWL class_ (hello:Greetedindividual).  The
-   purpose of the _output OWL class_ is to describe the expected
+   the service's output OWL class (hello:Greetedindividual).  The
+   purpose of the output OWL class is to describe the expected
    structure of the output instances generated by the service.
    Comparing the input and output RDF documents, the reader will observe
    that the URI of each output instance is equal to URI of its
@@ -865,7 +866,7 @@ OWL reasoner as the main vehicle for data and service matchmaking
 
          The identification of instances of an OWL class within an RDF graph
    is a commonly supported operation of OWL reasoners, which we we will
-   refer to here as _instance checking_.  The purpose of this section is
+   refer to here as instance checking.  The purpose of this section is
    provide guidelines for writing an input OWL class that enables an OWL
    reasoner to perform instance checking in a useful manner.
 
@@ -902,8 +903,234 @@ OWL reasoner as the main vehicle for data and service matchmaking
 
       </pre>
 
+      The first definition uses only a necessary condition.  It states that
+   a URI has one or more foaf:name properties if it is an instance of
+   hello:NamedIndividual.  (A URI is known to be an instance of the
+   hello:NamedIndividual if it has an rdf:type value of hello:
+   NamedIndividual.)  From this rule, a reasoner cannot deduce that a
+   given URI is a member of hello:NamedIndividual based on its
+   properties.
+
+   The second definition uses a necessary and sufficient condition.  It
+   states that a URI has one or more foaf:name properties if and only
+   if it is an instance of hello:NamedIndividual.  From this rule, the
+   reasoner can deduce that a URI with one or more foaf:name properties
+   is a member of the hello:NamedIndividual class.
+
+   A second consideration when authoring an input OWL class is that, at
+   the time of writing this document, the majority of OWL reasoners
+   operate under the Open World Assumption (OWA).  The OWA holds that a
+   statement cannot be inferred to be false merely by its absence in a
+   data set.  Instead, the truth value of a such a statement is simply
+   unknown.  For example, consider an RDF data set which provides foaf:
+   name values for various URIs representing people, as might be used
+   for input to the SADI "Hello, World!" service.  Under the OWA, the
+   fact that a particular URI (person) only has a single value for the
+   foaf:name property within a particular data set does not imply that
+   the person only has one name.  He or she may have aliases that are
+   represented by other values for foaf:name in other RDF data sets on
+   the web.  Similarly, one cannot assume that a person does not have a
+   name simply because there is no foaf:name value for that person in a
+   particular data set.
+
+   Under the OWA, certain types of property restrictions cannot be
+   directly tested for truth.  For example, consider the following
+   definition of hello:NamedIndividual, which uses an exact cardinality
+   restriction:
+      
+           <pre class='example highlight'>
+ 
+
+      &lt;owl:Class rdf:ID="NamedIndividual">
+        &lt;owl:equivalentClass>
+          &lt;owl:Restriction>
+            &lt;owl:onProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+            &lt;owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1&lt;/owl:cardinality>
+          &lt;/owl:Restriction>
+        &lt;/owl:equivalentClass>
+      &lt;/owl:Class>
+
+      </pre>
+      
+       This definition states that a URI is a member of the hello:
+   NamedIndividual class if and only if it has exactly one foaf:name
+   property.  However, even if a URI (person) has exactly one value for
+   foaf:name in a particular data set, that same URI may possess any
+   number of additional foaf:name values in other RDF data sets on the
+   web.  For this reason, a reasoner using the OWA can never confirm the
+   truth of an exact cardinality restriction by examining the known
+   properties of a URI.  It can only prove the falsehood of the
+   cardinality restriction in cases where the URI is known to have a
+   greater number of distinct values for the property than desired.
+
+   As the primary purpose of the input OWL class is to automatically
+   identify and extract input graphs for a service from an RDF data set,
+   it is important to define the input OWL class using property
+   restrictions that can be directly tested for truth.  The following
+   types of property restrictions satisfy this criteria:
+<ul>
+   <li>owl:someValuesFrom (existential quantification)</li>
+
+   <li>owl:hasValue (value restriction)</li>
+
+   <li>owl:minCardinality (minimum cardinality restriction)</li>
+
+   <li>owl:minQualifiedCardinality (qualified minimum cardinality restriction)</li>
+</ul>
+   On the other hand, the following types of property restrictions do
+   NOT satisfy the directly-testable-for-truth criteria:
+<ul>
+   <li>owl:allValuesFrom (universal quantification)</li>
+
+   <li>owl:cardinality (cardinality retriction)</li>
+
+   <li>owl:qualifiedCardinality (qualified cardinality restriction)</li>
+
+   <li>owl:maxCardinality (maximum cardinality restriction)</li>
+
+   <li>owl:maxQualifiedCardinality (qualified maximum cardinality restriction)</li>
+</ul>
+      
+<section>
+  <section>
+    <h4>The Output OWL Class</h4>
+     The output OWL class provides a machine readable description of the
+   output instances produced by a service, which facilitates the
+   automated identification of services that produce data of interest to
+   either human or software clients.  Each SADI service has exactly one
+   output OWL class which MUST be either referenced by or directly
+   included in the metadata graph for the service.
+
+   Each input instance that is sent to a service produces exactly one
+   output instance, and each pair of corresponding input and output
+   instances ALWAYS have the same URI.  While the function of the input
+   OWL class is to identify valid input instances for a service within
+   an RDF data set, the function of the output OWL class is to describe
+   the graph structures that are attached to each input instance as a
+   result of invoking the service.
+
+   To illustrate, the following shows the definition of hello:
+   GreetedIndividual, the output OWL class for the SADI "Hello, World!"
+   service:
+
+      &lt;owl:Class rdf:ID="GreetedIndividual">
+        &lt;owl:equivalentClass>
+          &lt;owl:Restriction>
+            &lt;owl:onProperty rdf:resource="#greeting"/>
+            &lt;owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">&lt;/owl:minCardinality>
+          &lt;/owl:Restriction>
+        &lt;/owl:equivalentClass>
+      &lt;/owl:Class>
+
+   The definition for hello:GreetedIndividual indicates that one or more
+   hello:greeting properties will be attached to each input instance as
+   a result of invoking the service.
+  
+</section>
+
+
+
+  <section>
+    <h4>The Output OWL Class</h4>
+     The output OWL class provides a machine readable description of the
+   output instances produced by a service, which facilitates the
+   automated identification of services that produce data of interest to
+   either human or software clients.  Each SADI service has exactly one
+   output OWL class which MUST be either referenced by or directly
+   included in the metadata graph for the service.
+
+   Each input instance that is sent to a service produces exactly one
+   output instance, and each pair of corresponding input and output
+   instances ALWAYS have the same URI.  While the function of the input
+   OWL class is to identify valid input instances for a service within
+   an RDF data set, the function of the output OWL class is to describe
+   the graph structures that are attached to each input instance as a
+   result of invoking the service.
+
+   To illustrate, the following shows the definition of hello:
+   GreetedIndividual, the output OWL class for the SADI "Hello, World!"
+   service:
+
+      &lt;owl:Class rdf:ID="GreetedIndividual">
+        &lt;owl:equivalentClass>
+          &lt;owl:Restriction>
+            &lt;owl:onProperty rdf:resource="#greeting"/>
+            &lt;owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1&lt;/owl:minCardinality>
+          &lt;/owl:Restriction>
+        &lt;/owl:equivalentClass>
+      &lt;/owl:Class>
+
+   The definition for hello:GreetedIndividual indicates that one or more
+   hello:greeting properties will be attached to each input instance as
+   a result of invoking the service.
+  
+</section>
+
     </section> <!--- end of section Describing Service Interfaces Using OWL -->
 
+    
+      <section>
+    <h2>Describing Service Execution Parameters Using OWL</h2>
+    
+ Service execution parameters are values which are separate from the
+   input instances for a service invocation, but which affect how those
+   input instances are processed.  For example, the parameterized
+   version of the SADI "Hello, World!" service (discussed below) accepts
+   an execution parameter indicating the desired language for the
+   generated greetings.
+   
+   <section>
+    <h4>The Parameter OWL Class</h4>
+       Analogously to the input and output OWL classes, the parameter OWL
+   class describes the RDF representation of the service execution
+   parameters.  A service may have any number of execution parameters,
+   and each parameter may have an arbitrarily complex representation in
+   RDF.  However, all parameter representations MUST be contained within
+   a single, connected RDF graph that is described by the parameter OWL
+   class.  Any service with execution parameters MUST have exactly one
+   parameter OWL class that is either referenced by or directly included
+   in the metadata graph for the service.
+
+   To demonstrate the description of service execution parameters,
+   consider an extended "Hello, World!" service that returns greetings
+   in alternate languages.  Such a service has been implemented and is
+   accessible at http://sadiframework.org/examples/hello-param.  The
+   parameter OWL class for the service (hello:SecondaryParameters)
+   describes a single execution parameter for the desired language of
+   the output greetings, as shown below:
+
+      &lt;owl:Class rdf:ID="SecondaryParameters">
+        &lt;owl:equivalentClass>
+          &lt;owl:Restriction>
+            &lt;owl:onProperty rdf:resource="#lang"/>
+            &lt;owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1&lt;/owl:minCardinality>
+          &lt;/owl:Restriction>
+        &lt;/owl:equivalentClass>
+      &lt;/owl:Class>
+
+   Although the intention of the hello:SecondaryParameters class is to
+   describe a graph with a single value for hello:lang, a minimum
+   cardinality restriction is used to facilitate instance checking with
+   OWL reasoners that use the Open World Assumption (OWA).  For a
+   detailed discussion of OWL class design as it pertains to instance
+   checking and the OWA, see Instance Checking and the Input OWL Class
+   (Section 9.3.1.1).
+
+   When invoking a service, a client indicates the desired values of
+   execution parameters by including a single _parameter instance_ in
+   the input RDF document for the service invocation, where the
+   parameter instance is an RDF node that is an instance of the
+   parameter OWL class.  All input instances within the input RDF
+   document are processed according to this single, shared set of
+   parameter values.
+   
+    
+   </section>
+  
+</section>
+
+
+    
 </section>
     
 </body>
