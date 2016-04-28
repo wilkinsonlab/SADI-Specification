@@ -139,11 +139,11 @@ The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and 
       <ol>
         <li>The resource MUST consume and produce RDF data natively</li>
         <li>The resource MUST return the same individuals/instances that it consumed - i.e. the root URI(s) of the RDF graph(s) it consumed MUST be the root URI(s) of the RDF graph(s) returned.</li>
-        <li>The output of the resource MUST be connected to the input URI via an RDF predicate</li>
+        <li>New data created by the resource MUST be connected to a node within the input graph via an RDF predicate</li>
         <li><span style='color:blue'>PROPOSED TO ADD: All resources SHOULD, and public-facing resources MUST, provide descriptive metadata following
         the <a href='http://www.datafairport.org/fair-principles-living-document-menu'>FAIR Data Principles</a>.
         This MUST include descriptors of the input and output data (in RDF Schema, OWL, or other widely-accepted descriptive format),
-        and SHOULD include a description of the functionality of the resource and/or the operations that lead to the output</span></li>
+        and SHOULD include a semantically marked-up description of the functionality of the resource and/or the operations that lead to the output</span></li>
       </ol>
       
       These behaviors result in a wide range of consequences that facilitate interoperability and integration with other Semantic Web resources:
