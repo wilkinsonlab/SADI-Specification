@@ -108,18 +108,10 @@
 
     
     
-    
-    
     <section id='sotd'>
       <p>
  </p>
     </section>
-    
-    
-    
-    
-    
-    
     
     
     
@@ -135,11 +127,11 @@ The key words MUST, MUST NOT, REQUIRED,SHOULD,SHOULD NOT, RECOMMENDED, MAY, and 
     
     <section id='sadipatterns'>
       <h2>SADI Design Patterns</h2>
-      SADI specifies <b>only three</b> behaviors that must be true of all implementations, <span style='color:blue'>and one behavior that must be true of any public-facing implementation</span>:
+      SADI specifies <b>only three</b> behaviors that must be true of all implementations, and one behavior that must be true of any public-facing implementation:
       <ol>
         <li>The resource MUST consume and produce RDF data natively</li>
         <li>The resource MUST return the same individuals/instances that it consumed - i.e. the root URI(s) of the RDF graph(s) it consumed MUST be the root URI(s) of the RDF graph(s) returned.</li>
-        <li>New data created by the resource MUST be connected to a node within the input graph via an RDF predicate</li>
+        <li>New data created by the resource MUST be connected to that URI (directly or indirectly) by an RDF predicate</li>
         <li>All resources SHOULD, and public-facing resources MUST, provide descriptive metadata following
         the <a href='http://www.nature.com/articles/sdata201618'>FAIR Data Principles</a>.
         This MUST include descriptors of the input and output data (in RDF Schema, OWL, or other widely-accepted descriptive format),
